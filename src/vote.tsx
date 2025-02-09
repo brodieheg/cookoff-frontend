@@ -21,7 +21,7 @@ export default function Vote() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("http://127.0.0.1:5000/entries");
+        const response = await fetch("https://brodiehegin.pythonanywhere.com/entries");
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
@@ -54,7 +54,7 @@ export default function Vote() {
     };
 
     try {
-      const response = await fetch("http://127.0.0.1:5000/vote", {
+      const response = await fetch("https://brodiehegin.pythonanywhere.com/vote", {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

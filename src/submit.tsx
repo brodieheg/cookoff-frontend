@@ -11,7 +11,7 @@ export default function Submit() {
       const entryData = { name, category };
 
       try {
-        const response = await fetch("http://127.0.0.1:5000/entries", {
+        const response = await fetch("https://brodiehegin.pythonanywhere.com/entries", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
