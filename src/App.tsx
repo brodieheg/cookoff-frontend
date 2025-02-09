@@ -1,35 +1,33 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import './App.css';
+import Vote from './vote';
+import Submit from './submit';
+import Results from './results';
+import chili from './assets/download (1).jpeg';
 
-function App() {
-  const [count, setCount] = useState(0)
-
+function Home() {
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <img src={chili} alt="Chili" />
+      <br />
+      <Link to="/vote"><button style={{ marginBottom: '5px' }}>Vote</button></Link><br />
+      <Link to="/submit"><button style={{ marginBottom: '5px' }}>Submit an Entry</button></Link><br />
+      <Link to="/results"><button style={{ marginBottom: '5px' }}>Get Results</button></Link><br />
     </>
-  )
+  );
 }
 
-export default App
+function App() {
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/vote" element={<Vote />} />
+        <Route path="/submit" element={<Submit />} />
+        <Route path="/results" element={<Results />} />
+      </Routes>
+    </Router>
+  );
+}
+
+export default App;
