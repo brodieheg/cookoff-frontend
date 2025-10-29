@@ -157,7 +157,13 @@ export default function Vote() {
           </select>
         </div>
         <br />
-        <button type="submit">Submit Vote</button>
+        <button className="submit-item" type="submit" style={{
+          marginTop: '20px',
+          padding: '8px 16px',
+          borderRadius: '6px',
+          backgroundColor: '#007bff',
+          color: 'black',
+        }}>Submit Vote</button>
       </form>
       <button
         onClick={() => navigate('/')}

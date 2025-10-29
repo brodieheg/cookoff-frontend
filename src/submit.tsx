@@ -68,7 +68,14 @@ export default function Submit() {
           </select>
         </div>
         <br />
-        <button type="submit">Submit</button>
+        <button type="submit" className="submit-item"
+          style={{
+            marginTop: '20px',
+            padding: '8px 16px',
+            borderRadius: '6px',
+            backgroundColor: '#007bff',
+            color: 'black',
+          }}>Submit</button>
       </form>
       <button
         onClick={() => navigate('/')}
