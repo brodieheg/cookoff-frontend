@@ -91,7 +91,7 @@ function Home() {
 
   return (
     <div style={{ textAlign: 'center' }}>
-      <h1>Oak Church Chili Cookoff ${currentYear}!</h1>
+      <h1>Oak Church Chili Cookoff {currentYear}!</h1>
       <img src={chili} alt="Chili" style={{ width: '200px', borderRadius: '8px' }} />
       <br />
       <button onClick={routeChange} id="vote" style={{ marginBottom: '5px' }}>
