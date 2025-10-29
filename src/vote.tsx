@@ -162,7 +162,7 @@ export default function Vote() {
           padding: '8px 16px',
           borderRadius: '6px',
           backgroundColor: '#007bff',
-          color: 'black',
+          color: 'white',
         }}>Submit Vote</button>
       </form>
       <button

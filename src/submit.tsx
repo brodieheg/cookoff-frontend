@@ -74,7 +74,7 @@ export default function Submit() {
             padding: '8px 16px',
             borderRadius: '6px',
             backgroundColor: '#007bff',
-            color: 'black',
+            color: 'white',
           }}>Submit</button>
       </form>
       <button
