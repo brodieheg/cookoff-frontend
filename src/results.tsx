@@ -62,11 +62,11 @@ function Results() {
 
                     {nameWinners.length > 0 && (
                         <div style={{ marginTop: '20px' }}>
-                            <h3>Name Winner</h3>
+                            <h3>Name</h3>
                             <ul style={{ listStyle: 'none', padding: 0 }}>
                                 {nameWinners.map((entry) => (
                                     <li key={entry.name}>
-                                        🏅 {entry.name} — {entry.votes} votes
+                                        {entry.name} — {entry.votes} votes
                                     </li>
                                 ))}
                             </ul>
