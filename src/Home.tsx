@@ -1,5 +1,5 @@
 // Fixing the asset import by using a placeholder URL since external file paths cannot be resolved.
-import chili from './assets/download (1).jpeg';
+import chili from './assets/snail-chef.jpg';
 import React, { useState } from 'react';
 import { useNavigate } from "react-router-dom";
 
