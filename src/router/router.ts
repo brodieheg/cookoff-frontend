@@ -2,6 +2,7 @@ import Vote from "../vote";
 import Submit from "../submit";
 import Results from "../results";
 import App from "../App";
+import Login from "../login";
 
 const mainRoutes = [
   {
@@ -20,6 +21,10 @@ const mainRoutes = [
     path: "/results",
     element: Results,
   },
+  {
+    path: "/login",
+    element: Login,
+  }
 ];
 
-export default mainRoutes;
+export default mainRoutes; ``
