@@ -11,7 +11,7 @@ function Login() {
         e.preventDefault();
 
         // Try a simple authenticated call to /live-results (any admin route works)
-        const res = await fetch('http://localhost:5000/live-results', {
+        const res = await fetch('https://brodiehegin.pythonanywhere.com/live-results', {
             headers: {
                 Authorization: 'Basic ' + btoa(`${username}:${password}`)
             }
