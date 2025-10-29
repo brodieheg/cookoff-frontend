@@ -15,11 +15,11 @@ function Login() {
         const credentials = btoa(`${username}:${password}`);
 
         // Strategy: Use a protected admin route to verify credentials.
-        const authTestUrl = 'https://brodiehegin.pythonanywhere.com/delete-entries';
+        const authTestUrl = 'https://brodiehegin.pythonanywhere.com/test-credentials';
 
         try {
             const res = await fetch(authTestUrl, {
-                method: 'DELETE',
+                method: 'GET',
                 headers: {
                     Authorization: `Basic ${credentials}`
                 }
