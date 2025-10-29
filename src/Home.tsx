@@ -1,68 +1,55 @@
-import { useState } from 'react';
+// Fixing the asset import by using a placeholder URL since external file paths cannot be resolved.
+const chili = 'https://placehold.co/200x200/C12020/FFFFFF?text=CHILI+PEPPER';
+import React, { useState } from 'react';
 import { useNavigate } from "react-router-dom";
-// NOTE: Replaced the local asset import with a public URL to fix the compilation error.
-const CHILI_IMAGE_URL = 'https://placehold.co/200x200/f6ad55/FFFFFF?text=CHILI';
-// Assuming the global CSS (App.css) provides default button styles
-
-const baseUrl = 'https://brodiehegin.pythonanywhere.com';
+// The import for './App.css' has been removed as it caused a resolution error
+// and is typically unnecessary in single-file components where styling is inline.
 
 function Home() {
   const navigate = useNavigate();
   const [lockMessage, setLockMessage] = useState('');
-  const [deleteMessage, setDeleteMessage] = useState('');
-  const [isConfirmingDelete, setIsConfirmingDelete] = useState(false);
+  const [deleteMessage, setDeleteMessage] = useState(''); // Added: New State for delete operation
+  const [confirmingDelete, setConfirmingDelete] = useState(false); // Added: New state for confirmation UI
 
-  // Use the same type of event object as the original code
-  const routeChange = (event: any) => {
-    const clickedElement = event.target;
+  const routeChange = (event: React.MouseEvent<HTMLButtonElement>) => {
+    const clickedElement = event.target as HTMLButtonElement;
     const elementId = clickedElement.id;
     navigate(`/${elementId}`);
   };
 
-  // Admin check based on local storage
   const isAdmin = !!localStorage.getItem('auth');
 
-  // Existing function for locking results
   const lockResults = async () => {
     const auth = localStorage.getItem('auth');
     if (!auth) return;
 
-    setLockMessage('Locking...');
-    setDeleteMessage(''); // Clear any delete messages
+    const res = await fetch('https://brodiehegin.pythonanywhere.com/lock-results', {
+      method: 'POST',
+      headers: {
+        Authorization: 'Basic ' + auth,
+      },
+    });
 
-    try {
-      const res = await fetch(`${baseUrl}/lock-results`, {
-        method: 'POST',
-        headers: {
-          Authorization: 'Basic ' + auth,
-        },
-      });
-
-      if (res.ok) {
-        setLockMessage('Results have been locked! 🔒');
-      } else {
-        setLockMessage('Failed to lock results. Check server logs.');
-      }
-    } catch (error) {
-      console.error('Locking error:', error);
-      setLockMessage('Error communicating with the API.');
+    if (res.ok) {
+      setLockMessage('Results have been locked!');
+    } else {
+      setLockMessage('Failed to lock results.');
     }
   };
 
-  // New function for deleting all entries
-  const deleteAllEntries = async () => {
+  // Added: New function to handle deleting all data
+  const deleteAllData = async () => {
     const auth = localStorage.getItem('auth');
     if (!auth) {
-      setDeleteMessage('Not authorized to delete.');
-      setIsConfirmingDelete(false);
+      setDeleteMessage('Authentication token missing.');
       return;
     }
 
-    setDeleteMessage('Deleting...');
-    setIsConfirmingDelete(false); // Reset confirmation state immediately
+    setDeleteMessage('Attempting to delete all data...');
+    setConfirmingDelete(false); // Hide confirmation buttons
 
     try {
-      const res = await fetch(`${baseUrl}/delete-entries`, {
+      const res = await fetch('https://brodiehegin.pythonanywhere.com/delete-entries', {
         method: 'DELETE',
         headers: {
           Authorization: 'Basic ' + auth,
@@ -70,28 +57,20 @@ function Home() {
       });
 
       if (res.ok) {
-        setDeleteMessage('✅ All entries and votes have been successfully deleted!');
+        setDeleteMessage('All data entries have been successfully deleted!');
       } else {
-        const errorText = await res.text();
-        setDeleteMessage(`❌ Failed to delete data: ${res.status} - ${errorText.substring(0, 100)}`);
+        setDeleteMessage('Failed to delete data. Check server logs.');
       }
     } catch (error) {
-      console.error('Deletion error:', error);
-      setDeleteMessage('❌ An unexpected error occurred during deletion.');
+      setDeleteMessage('Network error occurred during deletion.');
+      console.error('Delete request failed:', error);
     }
   };
 
-  // Removed adminButtonStyle helper object to simplify code
-
   return (
     <div style={{ textAlign: 'center' }}>
-      <img
-        src={CHILI_IMAGE_URL}
-        alt="Chili"
-        style={{ width: '200px', borderRadius: '8px', marginBottom: '10px' }}
-      />
+      <img src={chili} alt="Chili" style={{ width: '200px', borderRadius: '8px' }} />
       <br />
-
       <button onClick={routeChange} id="vote" style={{ marginBottom: '5px' }}>
         Vote
       </button><br />
@@ -101,102 +80,47 @@ function Home() {
       <button onClick={routeChange} id="results" style={{ marginBottom: '5px' }}>
         Get Results
       </button><br />
-
       {!isAdmin && (
         <button onClick={() => navigate('/login')} style={{ marginBottom: '5px' }}>
           Admin Login
         </button>
       )}
-
       {isAdmin && (
-        <div style={{ marginTop: '15px', paddingTop: '10px', borderTop: '1px solid #ccc' }}>
-          <h4 style={{ color: '#c53030', marginBottom: '10px', fontSize: '1rem' }}>Admin Actions</h4>
-
-          {/* Lock Results Button */}
-          <button
-            onClick={lockResults}
-            style={{
-              marginBottom: lockMessage ? '0' : '5px',
-              backgroundColor: '#e53e3e', // Red
-              color: 'white',
-              padding: '8px 16px',
-              borderRadius: '4px',
-              border: 'none',
-              cursor: 'pointer'
-            }}
-          >
+        <>
+          <button onClick={lockResults} style={{ marginBottom: '5px', backgroundColor: 'red', color: 'white' }}>
             Lock Results
           </button>
-          {lockMessage && <p style={{ fontSize: '0.8rem', color: lockMessage.startsWith('F') ? '#c53030' : '#38a169', margin: '5px 0 10px 0' }}>{lockMessage}</p>}
+          {lockMessage && <p>{lockMessage}</p>}
 
-
-          {/* Delete All Data UI */}
-          {!isConfirmingDelete ? (
-            <button
-              onClick={() => {
-                setDeleteMessage('');
-                setIsConfirmingDelete(true);
-              }}
-              style={{
-                marginBottom: '5px',
-                backgroundColor: '#9b2c2c', // Darker Red
-                color: 'white',
-                padding: '8px 16px',
-                borderRadius: '4px',
-                border: 'none',
-                cursor: 'pointer',
-                marginLeft: '10px'
-              }}
-            >
+          {/* Added: Admin Delete Data Button and Confirmation UI */}
+          {!confirmingDelete ? (
+            <button onClick={() => { setConfirmingDelete(true); setDeleteMessage(''); setLockMessage(''); }}
+              style={{ marginBottom: '5px', backgroundColor: 'red', color: 'white', marginLeft: '10px' }}>
               Delete All Data
             </button>
           ) : (
             <div style={{
-              padding: '10px',
-              border: '1px solid #c53030',
-              borderRadius: '4px',
-              backgroundColor: '#fef2f2',
-              marginTop: '10px',
               marginBottom: '5px',
+              border: '1px solid red',
+              padding: '5px',
+              borderRadius: '5px',
+              display: 'inline-block',
+              marginLeft: '10px'
             }}>
-              <p style={{ margin: '0 0 10px 0', color: '#9b2c2c', fontWeight: 'bold', fontSize: '0.9rem' }}>
-                ARE YOU SURE? (Irreversible)
-              </p>
-              <button
-                onClick={deleteAllEntries}
-                style={{
-                  backgroundColor: '#c53030', // Final confirmation red
-                  color: 'white',
-                  marginRight: '10px',
-                  padding: '5px 10px',
-                  borderRadius: '4px',
-                  border: 'none',
-                  cursor: 'pointer',
-                  fontWeight: 'bold'
-                }}
-              >
-                YES, DELETE
+              <span style={{ marginRight: '10px', color: 'red', fontWeight: 'bold' }}>ARE YOU SURE?</span>
+              <button onClick={deleteAllData}
+                style={{ backgroundColor: 'red', color: 'white', border: 'none', padding: '5px 10px', borderRadius: '3px', marginRight: '5px' }}>
+                Yes, Delete
               </button>
-              <button
-                onClick={() => {
-                  setIsConfirmingDelete(false);
-                  setDeleteMessage('Deletion cancelled.');
-                }}
-                style={{
-                  backgroundColor: '#cbd5e0',
-                  color: '#2d3748',
-                  padding: '5px 10px',
-                  borderRadius: '4px',
-                  border: 'none',
-                  cursor: 'pointer'
-                }}
-              >
+              <button onClick={() => setConfirmingDelete(false)}
+                style={{ backgroundColor: '#6c757d', color: 'white', border: 'none', padding: '5px 10px', borderRadius: '3px' }}>
                 Cancel
               </button>
             </div>
           )}
-          {deleteMessage && <p style={{ fontSize: '0.8rem', color: deleteMessage.startsWith('❌') ? '#c53030' : '#38a169', margin: '5px 0' }}>{deleteMessage}</p>}
-        </div>
+
+          {deleteMessage && <p style={{ color: deleteMessage.includes('Failed') || deleteMessage.includes('Network') ? 'red' : 'green' }}>{deleteMessage}</p>}
+        </>
       )}
     </div>
   );
