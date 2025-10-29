@@ -61,6 +61,20 @@ function Login() {
                 <button type="submit">Login</button>
             </form>
             {error && <p style={{ color: 'red' }}>{error}</p>}
+            <button
+                onClick={() => navigate('/')}
+                style={{
+                    marginTop: '20px',
+                    padding: '8px 16px',
+                    borderRadius: '6px',
+                    backgroundColor: '#007bff',
+                    color: 'white',
+                    border: 'none',
+                    cursor: 'pointer'
+                }}
+            >
+                Back to Home
+            </button>
         </div>
     );
 }

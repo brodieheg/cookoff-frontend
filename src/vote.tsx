@@ -159,6 +159,20 @@ export default function Vote() {
         <br />
         <button type="submit">Submit Vote</button>
       </form>
+      <button
+        onClick={() => navigate('/')}
+        style={{
+          marginTop: '20px',
+          padding: '8px 16px',
+          borderRadius: '6px',
+          backgroundColor: '#007bff',
+          color: 'white',
+          border: 'none',
+          cursor: 'pointer'
+        }}
+      >
+        Back to Home
+      </button>
     </div>
   );
 }

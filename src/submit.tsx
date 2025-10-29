@@ -1,8 +1,11 @@
 import React, { useState } from "react";
+import { useNavigate } from 'react-router-dom';
+
 
 export default function Submit() {
   const [name, setName] = useState("");
   const [category, setCategory] = useState("");
+  const navigate = useNavigate(); // 🆕 Added for navigation
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -67,6 +70,20 @@ export default function Submit() {
         <br />
         <button type="submit">Submit</button>
       </form>
+      <button
+        onClick={() => navigate('/')}
+        style={{
+          marginTop: '20px',
+          padding: '8px 16px',
+          borderRadius: '6px',
+          backgroundColor: '#007bff',
+          color: 'white',
+          border: 'none',
+          cursor: 'pointer'
+        }}
+      >
+        Back to Home
+      </button>
     </div>
   );
 }

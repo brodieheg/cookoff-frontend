@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 interface Entry {
     name: string;
@@ -11,6 +12,7 @@ function Results() {
     const [locked, setLocked] = useState(false);
     const [winners, setWinners] = useState<Entry[]>([]);
     const [error, setError] = useState('');
+    const navigate = useNavigate(); // 🆕 Added for navigation
 
     const fetchResults = async () => {
         try {
@@ -61,6 +63,22 @@ function Results() {
                     ))}
                 </div>
             )}
+
+            {/* 🆕 Back to Home Button */}
+            <button
+                onClick={() => navigate('/')}
+                style={{
+                    marginTop: '20px',
+                    padding: '8px 16px',
+                    borderRadius: '6px',
+                    backgroundColor: '#007bff',
+                    color: 'white',
+                    border: 'none',
+                    cursor: 'pointer'
+                }}
+            >
+                Back to Home
+            </button>
         </div>
     );
 }
