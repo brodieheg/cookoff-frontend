@@ -1,5 +1,5 @@
 // Fixing the asset import by using a placeholder URL since external file paths cannot be resolved.
-const chili = 'https://placehold.co/200x200/C12020/FFFFFF?text=CHILI+PEPPER';
+import chili from './assets/download (1).jpeg';
 import React, { useState } from 'react';
 import { useNavigate } from "react-router-dom";
 // The import for './App.css' has been removed as it caused a resolution error
