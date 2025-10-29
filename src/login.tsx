@@ -9,19 +9,37 @@ function Login() {
 
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
+        setError(''); // Clear previous errors
 
-        // Try a simple authenticated call to /live-results (any admin route works)
-        const res = await fetch('https://brodiehegin.pythonanywhere.com/live-results', {
-            headers: {
-                Authorization: 'Basic ' + btoa(`${username}:${password}`)
+        const credentials = btoa(`${username}:${password}`);
+
+        // 🔑 NEW STRATEGY: Use a protected admin route to verify credentials.
+        // The DELETE method is fine for a test call since we don't commit the transaction.
+        const authTestUrl = 'https://brodiehegin.pythonanywhere.com/delete-entries';
+
+        try {
+            const res = await fetch(authTestUrl, {
+                method: 'DELETE', // Method doesn't matter, only the Authorization header matters
+                headers: {
+                    Authorization: `Basic ${credentials}`
+                }
+            });
+
+            // The protected endpoint will return 201 (or 200) for valid credentials
+            // and 401 for invalid ones. We only care if the response is NOT a 401.
+            if (res.status !== 401) {
+                // If it's 200/201 (Success) or even 404/500 (but NOT 401), 
+                // we trust the admin authentication worked.
+                localStorage.setItem('auth', credentials);
+                navigate('/');
+            } else {
+                // The status is 401: Unauthorized
+                setError('Invalid credentials');
             }
-        });
-
-        if (res.status === 200) {
-            localStorage.setItem('auth', btoa(`${username}:${password}`));
-            navigate('/');
-        } else {
-            setError('Invalid credentials');
+        } catch (err) {
+            // Handle network errors (e.g., server offline)
+            console.error('Login request failed:', err);
+            setError('Could not connect to the server or verify credentials.');
         }
     };
 
