@@ -35,6 +35,24 @@ function Home() {
     }
   };
 
+  const unlockResults = async () => {
+    const auth = localStorage.getItem('auth');
+    if (!auth) return;
+
+    const res = await fetch('https://brodiehegin.pythonanywhere.com/unlock-results', {
+      method: 'POST',
+      headers: {
+        Authorization: 'Basic ' + auth,
+      },
+    });
+
+    if (res.ok) {
+      setLockMessage('Results have been unlocked!');
+    } else {
+      setLockMessage('Failed to unlock results.');
+    }
+  };
+
   const deleteAllData = async () => {
     const auth = localStorage.getItem('auth');
     if (!auth) {
@@ -64,7 +82,6 @@ function Home() {
     }
   };
 
-  // 🆕 Added logout functionality
   const handleLogout = () => {
     localStorage.removeItem('auth');
     navigate('/');
@@ -92,36 +109,29 @@ function Home() {
 
       {isAdmin && (
         <>
-          {/* 🆕 Logout Button */}
-          <button
-            onClick={handleLogout}
-            style={{
-              marginBottom: '5px',
-              backgroundColor: '#6c757d',
-              color: 'white',
-              marginLeft: '10px'
-            }}
-          >
-            Logout
-          </button><br />
-
+          {/* Lock Results */}
           <button
             onClick={lockResults}
-            style={{ marginBottom: '5px', backgroundColor: 'red', color: 'white' }}
+            style={{ marginBottom: '5px', backgroundColor: 'red', color: 'white', marginRight: '10px' }}
           >
             Lock Results
           </button>
+
+          {/* Unlock Results */}
+          <button
+            onClick={unlockResults}
+            style={{ marginBottom: '5px', backgroundColor: 'green', color: 'white', marginRight: '10px' }}
+          >
+            Unlock Results
+          </button><br />
+
           {lockMessage && <p>{lockMessage}</p>}
 
+          {/* Delete All Data */}
           {!confirmingDelete ? (
             <button
               onClick={() => { setConfirmingDelete(true); setDeleteMessage(''); setLockMessage(''); }}
-              style={{
-                marginBottom: '5px',
-                backgroundColor: 'red',
-                color: 'white',
-                marginLeft: '10px'
-              }}
+              style={{ marginBottom: '5px', backgroundColor: 'red', color: 'white', marginLeft: '10px' }}
             >
               Delete All Data
             </button>
@@ -186,6 +196,21 @@ function Home() {
               {deleteMessage}
             </p>
           )}
+
+          {/* Logout */}
+          <button
+            onClick={handleLogout}
+            style={{
+              marginTop: '10px',
+              backgroundColor: '#6c757d',
+              color: 'white',
+              border: 'none',
+              padding: '5px 15px',
+              borderRadius: '5px'
+            }}
+          >
+            Logout
+          </button>
         </>
       )}
     </div>
